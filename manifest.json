@@ -4,23 +4,22 @@
 	"name": "Freewar Toolset Chrome Plugin",
 	"description": "Freewar Toolset Chrome Plugin - Das Freewar Chrome Plugin",
 	"version": "1.0",
-
+	"background": { 
+		"persistent": false,
+		"scripts": ["background.js"] 
+	},
 	"permissions": [
-		"activeTab"
+		"tabs"
+		,"activeTab"
+		,"http://*.freewar.de/*"
+		,"http://freewar.higger.de/*"
 	],
 	
-	"background": {
-		"scripts": ["background.js"],
-		"persistent": false
-	},
-	
-	"browser_action": {
-		"default_title": "Make this page red"
-	}
-
-	//"browser_action":	{
-	//	"default_icon": "icon.png",
-	//	"default_popup": "fwplugin.html"
-	//}*/
+	"content_scripts": [{
+      "matches": ["http://*.freewar.de/*","http://freewar.higger.de/*"],
+      "js": ["jquery.min.js", "logic.cs.js", "freewar.cs.js"],
+      "all_frames": true
+    }],
+    "icons": { "128": "icon_128.png" }
 }
 
