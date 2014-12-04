@@ -1,0 +1,13 @@
+{
+    "name": "Freewar Toolset Chrome Plugin",
+    "manifest_version": 2,
+    "version": "1.0",
+    "description": "Freewar Toolset Chrome Plugin - Das Freewar Chrome Plugin",
+    "browser_action":	{
+        "default_icon": "icon.png",
+        "popup": "fwplugin.html"
+    },
+    "icons":{
+        "128":"icon_128.png"
+    }
+}
