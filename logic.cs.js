@@ -18,12 +18,38 @@ function FreewarParser() {
 
 FreewarParser.prototype.doStuff = function() {
 	var path = document.location.pathname;
-	
-	chrome.runtime.sendMessage({"method":"printAbilities"});
-	
-	if(path == "/freewar/internal/ability.php") {
-		this.ability();
+	var search = window.location.search;
+
+	switch(path) {
+		case "/freewar/internal/ability.php":
+			if(search=="") {
+				this.ability();
+				break;
+			}
+		case "/freewar/internal/item.php":
+			this.item();
+			break;
 	}
+
+}
+
+FreewarParser.prototype.item = function() {
+	console.log("item frame loaded");
+	
+	var valueCurOfExpression = /(\d+)\/(\d+)/;
+	
+	var healthC = $("#listrow_lifep").text(); //Lebenspunkte
+	var intSpeeP = $("#listrow_int"); //Intelligenz und Speed
+	var offenceP = $("#listrow_attackp"); //Angriffsdaten
+	var defenceP = $("#listrow_defensep"); //Verteidigungsdaten
+	var phasenPEP = $("#phasetext"); //Phasenenergie
+
+	if(healthC.indexOf("Lebenspunkte") > -1) {
+		valueCurOfExpression.exec(healthC);
+		var health = {"current": RegExp.$1, "max": RegExp.$2};
+		console.log(health);
+	}
+
 }
 
 FreewarParser.prototype.ability = function() {
