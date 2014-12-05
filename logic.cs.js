@@ -192,8 +192,10 @@ FreewarParser.prototype.main = function() {
 	this.receiveFromBackground("userData",function(value) {
 		if(value != null) {				
 			var health = value.health.current;
+			var offence = value.offence.player + value.offence.weapon;
+			var defence = value.defence.player + value.defence.weapon;
 			$("p.personlistcaption:first").each(function(i,obj) {
-				obj.innerHTML += " - Noch "+health+" Lebenspunkte";
+				obj.innerHTML += " (L: "+health+", A: "+offence+", V: "+defence+")";
 			});
 		}
 	});

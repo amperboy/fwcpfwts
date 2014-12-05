@@ -12,7 +12,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			bgStorage[request.host] = {};
 		}
 		bgStorage[request.host][request.key] = request.value;
-		console.log(bgStorage);
 	}
 	else if (request.method == "receiveFromBackground") {
 		var value = null;
