@@ -3,10 +3,6 @@ function FWCPFWTS() {
 
 FWCPFWTS.prototype.freewar = function() {
 		var modificator = new FreewarParser();
-	
-		chrome.runtime.sendMessage({method: "pageloaded"}, function(response) {
-			console.log(response);
-		});
 		
 		return modificator;
 }
@@ -23,13 +19,16 @@ function FreewarParser() {
 FreewarParser.prototype.doStuff = function() {
 	var path = document.location.pathname;
 	
+	chrome.runtime.sendMessage({"method":"printAbilities"});
+	
 	if(path == "/freewar/internal/ability.php") {
 		this.ability();
 	}
 }
 
 FreewarParser.prototype.ability = function() {
-	console.log("ability loaded");
+	var abilities = new Array();
+	
 	$(".abilitymenu").each(function(i,table) {
 		$(table).find("tr").each(function(k,row) {
 			if(k==0) return;
@@ -49,8 +48,10 @@ FreewarParser.prototype.ability = function() {
 				maxLevel = $(cells[2]).find("b").html();
 			}
 			
-			var logStr = abilityName+" : "+curLevel+"/"+maxLevel;
-			console.log(logStr);
+			var ability = {"id": k, "name": abilityName, "curLevel": curLevel, "maxLevel": maxLevel};
+			abilities.push(ability);
 		});
 	});
+	
+	chrome.runtime.sendMessage({"method":"setAbilities", "abilities": abilities});
 }

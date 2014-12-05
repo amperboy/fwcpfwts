@@ -1,7 +1,21 @@
+function Storage() {}
+Storage.prototype.abilities = null;
+
+var store = new Storage();
+
+///////////////////////////////////////////////////////////////////////////////////
+
+function setAbilities(abilities) {
+	store.abilities = abilities;
+	console.log("setAbilities="+store.abilities);
+}
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	console.log(sender.tab ? "from a content script:" + sender.tab.url : "from the extension");
-            
-    if (request.method == "pageloaded") {    
-        sendResponse({response: "ok"});
-    }
+	if (request.method == "setAbilities") { 
+		setAbilities(request.abilities);
+	}
+	
+	if (request.method == "printAbilities") { 
+		console.log("printAbilities="+store.abilities);
+	}
 });
