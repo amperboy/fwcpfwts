@@ -308,7 +308,8 @@ FreewarParser.prototype.playerCheck = function(userdata, playerCell) {
 	if($(playerCell).text().indexOf("NPC") > -1) {
 		var npc = {
 			"name": null
-			, "npcTye": null
+			, "npcType": null
+			, "resistant": 0
 			, "health": null
 			, "offence": {"player": null, "weapon": null}
 			, "defence": {"player": 0, "weapon": 0}
@@ -327,13 +328,13 @@ FreewarParser.prototype.playerCheck = function(userdata, playerCell) {
 			//NPC Type and Health
 			if(textOfTextnode.indexOf("NPC") > -1) {
 				var headA = textOfTextnode.split(" LP: ");
-				var npcTye = headA[0];
-				npc.npcTye = npcTye;						
+				var npcType = headA[0];
+				npc.npcType = npcType;
 				
-				if(npcTye.indexOf("Resistenz") > -1) {
+				if(npcType.indexOf("Resistenz") > -1) {
 					npc.resistant = 1;
 				}
-				if(npcTye.indexOf("Superresistenz") > -1) {
+				if(npcType.indexOf("Superresistenz") > -1) {
 					npc.resistant = 2;
 				}
 				
@@ -357,11 +358,24 @@ FreewarParser.prototype.playerCheck = function(userdata, playerCell) {
 				
 				npc.offence = {"player": offence, "weapon": 0};
 			}
-		});
-				
-		if(npc.health != null) {
-			var fight = toolsetHelper.fight(userdata,npc,0);
+		});		
+		
+		if(npc.health != null && npc.offence != null && npc.offence.player > 0) {
+			if(npc.resistant > 0) {
+				console.log(npc.name+" - "+npc.npcType + " - " +npc.resistant);
+			}		
+		
+			
+			var fight = toolsetHelper.fight(userdata,npc,npc.resistant);
 			$(playerCell).find("a:last").after(fight.resultObj);
+			
+			if (fight.result != toolsetHelper.SIEG) {
+				var link = $(playerCell).find("a.fastattack").remove();
+			}
+			
+		}
+		else {
+			$(playerCell).find("a.fastattack").remove();
 		}
 		
 	}
